@@ -17,8 +17,4 @@
     <Page Include="App.xaml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Servicios\" />
-  </ItemGroup>
-
 </Project>
