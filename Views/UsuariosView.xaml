@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="ProyectoIntegradorS5.Views.UsuariosView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <TabControl>
+        <TabItem Header="Clientes">
+            <StackPanel Margin="10">
+                <TextBlock Text="Gestión de Clientes" FontSize="16" FontWeight="Bold" />
+                <!-- Aquí puedes añadir formularios, listas, etc -->
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Empleados">
+            <StackPanel Margin="10">
+                <TextBlock Text="Gestión de Empleados" FontSize="16" FontWeight="Bold" />
+                <!-- Aquí puedes añadir formularios, listas, etc -->
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</UserControl>
