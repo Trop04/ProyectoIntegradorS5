@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:ProyectoIntegradorS5.Views"
-        Title="Planificador de Producción" Height="600" Width="1000">
+        Title="Proyecto Integrador" Height="600" Width="1000">
 
     <Window.Resources>
         <Style x:Key="AeroModernoButtonStyle" TargetType="Button">

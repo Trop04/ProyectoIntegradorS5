@@ -3,6 +3,10 @@ using System.Windows.Controls;
 using ProyectoIntegradorS5.Modelos;
 using ProyectoIntegradorS5.Servicios;
 using System.Collections.ObjectModel;
+using Microsoft.Win32;
+using System.IO;
+using System.Text;
+using System.Linq;
 
 namespace ProyectoIntegradorS5.Views
 {
@@ -17,6 +21,55 @@ namespace ProyectoIntegradorS5.Views
         {
             InitializeComponent();
             CargarDatos();
+        }
+
+        private void ExportarClientes_Click(object sender, RoutedEventArgs e)
+        {
+            ExportarCSV(Clientes, new[] { "NombreCompleto", "Correo", "Telefono", "Direccion", "Ciudad", "Estado", "FechaCreacion" });
+        }
+
+        private void ExportarEmpleados_Click(object sender, RoutedEventArgs e)
+        {
+            ExportarCSV(Empleados, new[] { "NombreCompleto", "Correo", "Telefono", "Cargo", "Departamento", "Salario", "Horario", "Estado" });
+        }
+
+        private void ExportarCSV(ObservableCollection<Usuario> lista, string[] propiedades)
+        {
+            var dlg = new SaveFileDialog
+            {
+                Filter = "CSV files (*.csv)|*.csv",
+                FileName = "Exportacion.csv"
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                var sb = new StringBuilder();
+
+                // Cabecera
+                sb.AppendLine(string.Join(",", propiedades));
+
+                foreach (var item in lista)
+                {
+                    var valores = propiedades.Select(prop =>
+                    {
+                        var propInfo = typeof(Usuario).GetProperty(prop);
+                        if (propInfo != null)
+                        {
+                            var val = propInfo.GetValue(item);
+                            if (val == null) return "";
+                            if (val is DateTime dt) return dt.ToString("yyyy-MM-dd");
+                            if (val is decimal dec) return dec.ToString("F2");
+                            return val.ToString().Replace(",", " ");
+                        }
+                        return "";
+                    });
+
+                    sb.AppendLine(string.Join(",", valores));
+                }
+
+                File.WriteAllText(dlg.FileName, sb.ToString(), Encoding.UTF8);
+                MessageBox.Show("Exportación completada.", "Exportar CSV", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private async void CargarDatos()
