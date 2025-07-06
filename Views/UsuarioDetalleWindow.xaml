@@ -145,6 +145,26 @@
             </Setter>
         </Style>
 
+        <Style TargetType="Label" x:Key="LabelTextStyle">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#FFFFFF" Offset="0"/>
+                        <GradientStop Color="#CCCCCC" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="2" Direction="270" Color="Black" Opacity="0.4" BlurRadius="4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style TargetType="TextBlock" x:Key="SectionHeaderStyle">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -412,40 +432,65 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Detalles del Usuario" Grid.Row="0" Style="{StaticResource WindowHeaderTextStyle}"
-           MouseLeftButtonDown="Window_MouseLeftButtonDown"/>
 
+            <TextBlock Text="Detalles del Usuario" Grid.Row="0"
+               Style="{StaticResource WindowHeaderTextStyle}"
+               MouseLeftButtonDown="Window_MouseLeftButtonDown" />
+
+            
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <StackPanel Orientation="Vertical" Margin="0,0,0,10">
-                    <TextBlock Text="Datos Personales" Style="{StaticResource SectionHeaderStyle}"/>
-                    <TextBox x:Name="txtNombre" Tag="Nombre completo"/>
+                <StackPanel Orientation="Vertical" Margin="0,0,0,10" Width="400">
+
+                    <!-- Datos comunes -->
+                    <TextBlock Text="Datos Personales" Style="{StaticResource SectionHeaderStyle}" Margin="0,10,0,5"/>
+                    <Label Content="Nombre completo" Style="{StaticResource LabelTextStyle}"/> 
+                    <TextBox x:Name="txtNombre"/>
+
+                    <Label Content="Fecha de nacimiento" Style="{StaticResource LabelTextStyle}"/>
                     <DatePicker x:Name="dpFechaNacimiento"/>
 
-                    <TextBlock Text="Contacto" Style="{StaticResource SectionHeaderStyle}"/>
-                    <TextBox x:Name="txtCorreo" Tag="Correo electrónico"/>
-                    <TextBox x:Name="txtTelefono" Tag="Teléfono"/>
+                    <TextBlock Text="Contacto" Style="{StaticResource SectionHeaderStyle}" Margin="0,20,0,5"/>
+                    <Label Content="Correo electrónico" Style="{StaticResource LabelTextStyle}"/>
+                    <TextBox x:Name="txtCorreo"/>
 
-                    <StackPanel x:Name="clientePanel">
-                        <TextBlock Text="Dirección" Style="{StaticResource SectionHeaderStyle}"/>
-                        <TextBox x:Name="txtDireccion" Tag="Dirección"/>
-                        <TextBox x:Name="txtCiudad" Tag="Ciudad"/>
+                    <Label Content="Teléfono" Style="{StaticResource LabelTextStyle}"/>
+                    <TextBox x:Name="txtTelefono"/>
+
+                    <!-- Cliente -->
+                    <StackPanel x:Name="clientePanel" Visibility="Collapsed">
+                        <TextBlock Text="Dirección del Cliente" Style="{StaticResource SectionHeaderStyle}" Margin="0,20,0,5"/>
+                        <Label Content="Dirección" Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox x:Name="txtDireccion"/>
+
+                        <Label Content="Ciudad" Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox x:Name="txtCiudad"/>
                     </StackPanel>
 
-                    <StackPanel x:Name="empleadoPanel">
-                        <TextBlock Text="Información Laboral" Style="{StaticResource SectionHeaderStyle}"/>
-                        <TextBox x:Name="txtCargo" Tag="Cargo"/>
-                        <TextBox x:Name="txtDepartamento" Tag="Departamento"/>
-                        <TextBox x:Name="txtSalario" Tag="Salario"/>
-                        <TextBox x:Name="txtHorario" Tag="Horario de trabajo"/>
+                    <!-- Empleado -->
+                    <StackPanel x:Name="empleadoPanel" Visibility="Collapsed">
+                        <TextBlock Text="Información Laboral" Style="{StaticResource SectionHeaderStyle}" Margin="0,20,0,5"/>
+                        <Label Content="Cargo" Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox x:Name="txtCargo"/>
+
+                        <Label Content="Departamento" Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox x:Name="txtDepartamento"/>
+
+                        <Label Content="Salario" Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox x:Name="txtSalario"/>
+
+                        <Label Content="Horario de trabajo" Style="{StaticResource LabelTextStyle}"/>
+                        <TextBox x:Name="txtHorario"/>
                     </StackPanel>
 
-                    <TextBlock Text="Estado" Style="{StaticResource SectionHeaderStyle}"/>
-                    <ComboBox x:Name="cmbEstado" SelectedIndex="0">
+                    
+                    <TextBlock Text="Estado" Style="{StaticResource SectionHeaderStyle}" Margin="0,20,0,5"/>
+                    <ComboBox x:Name="cmbEstado">
                         <ComboBoxItem Content="Activo"/>
                         <ComboBoxItem Content="Inactivo"/>
                     </ComboBox>
                 </StackPanel>
             </ScrollViewer>
+
 
             <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,20,0,0">
                 <Button Content="Guardar" Style="{StaticResource AeroModernButtonStyle}" Width="120" Height="40" Click="OnGuardar"/>

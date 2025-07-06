@@ -111,13 +111,13 @@ namespace ProyectoIntegradorS5.Servicios
             cmd.Parameters.AddWithValue("@Estado", usuario.Estado);
             cmd.Parameters.AddWithValue("@FechaCreacion", usuario.FechaCreacion);
 
-            // Campos Empleado
+            // Empleado
             cmd.Parameters.AddWithValue("@Cargo", (object?)usuario.Cargo ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@Departamento", (object?)usuario.Departamento ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@Salario", usuario.Salario);
             cmd.Parameters.AddWithValue("@Horario", (object?)usuario.Horario ?? DBNull.Value);
 
-            // Campos Cliente
+            // CCliente
             cmd.Parameters.AddWithValue("@Direccion", (object?)usuario.Direccion ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@Ciudad", (object?)usuario.Ciudad ?? DBNull.Value);
         }

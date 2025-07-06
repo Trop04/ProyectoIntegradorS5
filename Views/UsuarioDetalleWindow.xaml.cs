@@ -13,6 +13,10 @@ namespace ProyectoIntegradorS5.Views
         public UsuarioDetalleWindow(string tipo, Usuario usuarioExistente = null)
         {
             InitializeComponent();
+            if (usuarioExistente == null)
+            {
+                cmbEstado.SelectedIndex = 0; //activo
+            }
             this.tipo = tipo;
             Usuario = usuarioExistente ?? new Usuario { Tipo = tipo, FechaCreacion = DateTime.Now };
 
@@ -79,8 +83,29 @@ namespace ProyectoIntegradorS5.Views
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text) || string.IsNullOrWhiteSpace(txtCorreo.Text))
             {
-                MessageBox.Show("Nombre y correo son obligatorios.");
+                MessageBox.Show("Nombre y correo son obligatorios.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
+            }
+
+            if (tipo == "Empleado")
+            {
+                if (string.IsNullOrWhiteSpace(txtCargo.Text) ||
+                    string.IsNullOrWhiteSpace(txtDepartamento.Text) ||
+                    string.IsNullOrWhiteSpace(txtSalario.Text) ||
+                    !decimal.TryParse(txtSalario.Text, out _))
+                {
+                    MessageBox.Show("Los campos Cargo, Departamento y un salario válido son obligatorios para empleados.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
+
+            if (tipo == "Cliente")
+            {
+                if (string.IsNullOrWhiteSpace(txtDireccion.Text) || string.IsNullOrWhiteSpace(txtCiudad.Text))
+                {
+                    MessageBox.Show("Los campos Dirección y Ciudad son obligatorios para clientes.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
             }
 
             Usuario.NombreCompleto = txtNombre.Text;
@@ -99,6 +124,7 @@ namespace ProyectoIntegradorS5.Views
                 Usuario.Cargo = txtCargo.Text;
                 Usuario.Departamento = txtDepartamento.Text;
                 Usuario.Horario = txtHorario.Text;
+
                 if (decimal.TryParse(txtSalario.Text, out decimal salario))
                     Usuario.Salario = salario;
             }
@@ -106,6 +132,7 @@ namespace ProyectoIntegradorS5.Views
             DialogResult = true;
             Close();
         }
+
 
         private void OnCancelar(object sender, RoutedEventArgs e)
         {
