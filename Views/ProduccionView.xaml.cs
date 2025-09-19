@@ -5,38 +5,23 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
 namespace ProyectoIntegradorS5.Views
 {
-    public partial class ProduccionView : UserControl
+    public partial class ProduccionView : System.Windows.Controls.UserControl
     {
-        private readonly RecursoController controller = new();
+        private readonly RecursoController controller;
         private Recurso recursoEnEdicion = null;
+
+
 
         public ProduccionView(RecursoController vm)
         {
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             InitializeComponent();
             controller = vm;
-            /**
-            var tabla = new Recurso { Nombre = "Tabla", CostoUnitario = 50, InventarioDisponible = 100, TiempoProduccionMinutos = 10 };
-            var patas = new Recurso { Nombre = "Patas", CostoUnitario = 20, InventarioDisponible = 200, TiempoProduccionMinutos = 5 };
-            var mesa = new Recurso
-            {
-                Nombre = "Mesa",
-                CostoUnitario = 0,
-                TiempoProduccionMinutos = 15,
-                Componentes = new List<Componente> {
-                    new Componente { Recurso = tabla, CantidadNecesaria = 1 },
-                    new Componente { Recurso = patas, CantidadNecesaria = 4 }
-                }
-            };
-
-            controller.AgregarRecurso(tabla);
-            controller.AgregarRecurso(patas);
-            controller.AgregarRecurso(mesa);
-            **/
             cmbRecursos.ItemsSource = controller.Recursos;
             cmbComponentes.ItemsSource = controller.Recursos;
             lstRecursos.ItemsSource = controller.Recursos;
@@ -51,7 +36,7 @@ namespace ProyectoIntegradorS5.Views
             var grafo = controller.GenerarGrafo(out string resumen);
             var viewer = new GViewer { Graph = grafo };
             graphViewerHost.Child = viewer;
-            MessageBox.Show(resumen);
+            System.Windows.MessageBox.Show(resumen);
         }
 
         private void OnAgregarRecurso(object sender, RoutedEventArgs e)
@@ -126,7 +111,7 @@ namespace ProyectoIntegradorS5.Views
             recursoEnEdicion = null;
             lstComponentes.Items.Clear();
             RefrescarVistas();
-            MessageBox.Show("Recurso editado.");
+            System.Windows.MessageBox.Show("Recurso editado.");
         }
 
         private void OnEliminarRecurso(object sender, RoutedEventArgs e)
@@ -135,14 +120,14 @@ namespace ProyectoIntegradorS5.Views
             {
                 controller.EliminarRecurso(r);
                 RefrescarVistas();
-                MessageBox.Show("Recurso eliminado.");
+                System.Windows.MessageBox.Show("Recurso eliminado.");
             }
         }
 
         private void OnGuardarDatos(object sender, RoutedEventArgs e)
         {
             controller.Guardar("datos.json");
-            MessageBox.Show("Datos guardados.");
+            System.Windows.MessageBox.Show("Datos guardados.");
         }
 
         private void OnCargarDatos(object sender, RoutedEventArgs e)
@@ -151,7 +136,7 @@ namespace ProyectoIntegradorS5.Views
             cmbRecursos.ItemsSource = controller.Recursos;
             cmbComponentes.ItemsSource = controller.Recursos;
             lstRecursos.ItemsSource = controller.Recursos;
-            MessageBox.Show("Datos cargados.");
+            System.Windows.MessageBox.Show("Datos cargados.");
         }
 
         private void RefrescarVistas()
@@ -160,5 +145,8 @@ namespace ProyectoIntegradorS5.Views
             cmbComponentes.Items.Refresh();
             lstRecursos.Items.Refresh();
         }
+
+
     }
+
 }

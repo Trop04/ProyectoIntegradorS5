@@ -7,21 +7,22 @@ namespace ProyectoIntegradorS5
 {
     public partial class MainWindow : Window
     {
-        private RecursoController vm = new();
+        private readonly RecursoController recursoController;
 
         public MainWindow()
         {
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             InitializeComponent();
 
-            // Cargar vista inicial: Producción
-            MainContentGrid.Children.Add(new ProduccionView(vm));
+            recursoController = App.GetService<RecursoController>();
+
+            MainContentGrid.Children.Add(new ProduccionView(recursoController));
         }
 
         private void OnProduccionClick(object sender, RoutedEventArgs e)
         {
             MainContentGrid.Children.Clear();
-            MainContentGrid.Children.Add(new ProduccionView(vm));
+            MainContentGrid.Children.Add(new ProduccionView(recursoController));
         }
 
         private void OnUsuariosClick(object sender, RoutedEventArgs e)
