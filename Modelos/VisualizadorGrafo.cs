@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace ProyectoIntegradorS5.Modelos
 {
-    public class VisualizadorGrafo
+    public class VisualizadorGrafo : IVisualizadorGrafo
     {
         private readonly IAlgoritmoCosto planificador;
 
         public VisualizadorGrafo(IAlgoritmoCosto planificador)
         {
-            this.planificador = planificador;
+            this.planificador = planificador ?? throw new ArgumentNullException(nameof(planificador));
         }
 
         public Microsoft.Msagl.Drawing.Graph GenerarGrafoProduccion(Recurso recurso, int cantidad)

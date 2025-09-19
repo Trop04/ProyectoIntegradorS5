@@ -1,8 +1,8 @@
 ﻿using ProyectoIntegradorS5.Modelos;
+using ProyectoIntegradorS5.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text.Json;
 
@@ -11,16 +11,21 @@ namespace ProyectoIntegradorS5.Controladores
     public class RecursoController
     {
         private readonly IAlgoritmoCosto planificador;
-        private readonly VisualizadorGrafo visualizador;
+        private readonly IVisualizadorGrafo visualizador;
+        private readonly IFileService fileService;
 
         public List<Recurso> Recursos { get; private set; } = new();
         public Recurso RecursoSeleccionado { get; set; }
         public int CantidadProduccion { get; set; }
 
-        public RecursoController()
+        public RecursoController(
+            IAlgoritmoCosto planificador,
+            IVisualizadorGrafo visualizador,
+            IFileService fileService)
         {
-            planificador = new PlanificadorBasico();
-            visualizador = new VisualizadorGrafo(planificador);
+            this.planificador = planificador ?? throw new ArgumentNullException(nameof(planificador));
+            this.visualizador = visualizador ?? throw new ArgumentNullException(nameof(visualizador));
+            this.fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
         }
 
         public void AgregarRecurso(Recurso recurso) => Recursos.Add(recurso);
@@ -42,7 +47,16 @@ namespace ProyectoIntegradorS5.Controladores
         public Microsoft.Msagl.Drawing.Graph GenerarGrafo(out string resumen)
         {
             var grafo = visualizador.GenerarGrafoProduccion(RecursoSeleccionado, CantidadProduccion);
-            var puedeProducir = ((PlanificadorBasico)planificador).PuedeProducir(RecursoSeleccionado, CantidadProduccion);
+            bool puedeProducir;
+            if (planificador is PlanificadorBasico planificadorBasico)
+            {
+                puedeProducir = planificadorBasico.PuedeProducir(RecursoSeleccionado, CantidadProduccion);
+            }
+            else
+            {
+                // Fallback 
+                puedeProducir = true;
+            }
 
             if (!puedeProducir)
             {
@@ -52,7 +66,6 @@ namespace ProyectoIntegradorS5.Controladores
 
             var costo = planificador.CalcularCosto(RecursoSeleccionado, CantidadProduccion);
             var tiempo = planificador.CalcularTiempoProduccion(RecursoSeleccionado, CantidadProduccion);
-
             resumen = $"Costo total: {costo.ToString("C", new CultureInfo("en-US"))}\nTiempo total estimado: {tiempo} minutos";
             return grafo;
         }
@@ -61,20 +74,19 @@ namespace ProyectoIntegradorS5.Controladores
         {
             var opciones = new JsonSerializerOptions { WriteIndented = true };
             var json = JsonSerializer.Serialize(Recursos, opciones);
-            File.WriteAllText(ruta, json);
+            fileService.WriteAllText(ruta, json);
         }
 
         public void Cargar(string ruta)
         {
-            if (!File.Exists(ruta))
+            if (!fileService.Exists(ruta))
                 return;
 
-            var json = File.ReadAllText(ruta);
+            var json = fileService.ReadAllText(ruta);
             var cargados = JsonSerializer.Deserialize<List<Recurso>>(json);
             if (cargados != null)
             {
                 Recursos = cargados;
-
                 foreach (var recurso in Recursos)
                 {
                     foreach (var componente in recurso.Componentes)
